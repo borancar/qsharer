@@ -1,0 +1,54 @@
+<!doctype html>
+
+<html>
+    <head>
+        <meta charset="utf8">
+        <script type="text/javascript" src="jquery.min.js"></script>
+        <script type="text/javascript" src="qrcode.js"></script>
+        <script type="text/javascript">
+            var person = {
+                first_name: "John",
+                last_name: "Doe",
+                address: "Somewhere, World",
+                email: "john.doe@somewhere.world",
+                phone_number: "+0123456789"
+            };
+
+            $(document).ready(() => {
+                let qrcode = new QRCode(document.getElementById("qrcode"), {
+                    width: 300,
+                    height: 300
+                });
+
+                qrcode.makeCode("");
+
+                let toshare = {};
+
+                $("form input").each((i, el) => {
+                    $(el).change(() => {
+                        if (el.checked == true) {
+                            toshare[el.id] = person[el.id];
+                        } else {
+                            delete toshare[el.id];
+                        }
+
+                        console.log("toshare: " + JSON.stringify(toshare).length);
+                        qrcode.makeCode(JSON.stringify(toshare));
+                    });
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <form>
+            <input type="checkbox" id="first_name">First name
+            <input type="checkbox" id="last_name">Last name
+            <input type="checkbox" id="address">Address
+            <input type="checkbox" id="email">Email
+            <input type="checkbox" id="phone_number">Phone Number
+        </form>
+        <br>
+        <div id="qrcode" style="width=300px; height:300px;">
+        </div>
+    </body>
+</html>
